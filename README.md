@@ -1,32 +1,75 @@
-# Movie Recommendation System (Tkinter GUI)
+# MovieSphere – Movie Recommendation System
 
-This project is a simple content-based movie recommendation system built with Python. It uses a graphical user interface (GUI) made with Tkinter and recommends movies based on their descriptions using TF-IDF and cosine similarity.
+MovieSphere is a full-stack movie recommendation web application that helps users discover movies based on their interests using **content-based recommendation techniques**. The system analyzes movie metadata and recommends similar movies by applying **TF-IDF Vectorization** and **Cosine Similarity**. It provides a modern, responsive, and user-friendly interface for searching, exploring, and discovering movies.
 
 ## Features
 
-- Select a movie from a dropdown menu
-- Get top 5 content-based movie recommendations
-- View recommendations as text and bar chart
-- Compare total watch counts of all movies with a bar chart
-- Simple, interactive GUI using Tkinter
-- Visualizations with Matplotlib
+* Secure user registration and login using JWT authentication
+* Browse trending, popular, and top-rated movies
+* Search movies by title
+* View detailed movie information
+* Receive content-based movie recommendations
+* Add and manage favorite movies
+* View user profile and watch history
+* Responsive and modern web interface
+* Fast and accurate recommendation engine powered by Classical Machine Learning
 
 ## Technologies Used
 
-- Python
-- pandas
-- scikit-learn (TF-IDF and cosine similarity)
-- Matplotlib
-- Tkinter
+### Frontend
+
+* HTML5
+* Tailwind CSS
+* JavaScript
+
+### Backend
+
+* Python
+* Flask
+* Flask SQLAlchemy
+* Flask JWT Extended
+* Flask CORS
+
+### Database
+
+* SQLite (Development)
+* PostgreSQL (Production)
+
+### Machine Learning
+
+* Pandas
+* NumPy
+* Scikit-learn
+* TF-IDF Vectorization
+* Cosine Similarity
 
 ## How It Works
 
-1. The program loads a set of movies with their descriptions and watch counts.
-2. When a user selects a movie, TF-IDF vectorization is used to compare the description to others.
-3. Cosine similarity determines the top 5 most similar movies.
-4. Results are shown as a list and a horizontal bar chart.
-5. Users can also view a bar chart of watch counts for all movies.
+1. The system loads movie data, including titles, genres, descriptions, and other metadata.
+2. The dataset is cleaned and preprocessed using Pandas and NumPy.
+3. Movie descriptions are converted into numerical feature vectors using TF-IDF Vectorization.
+4. Cosine Similarity is used to calculate the similarity between movies.
+5. When a user searches for or selects a movie, the recommendation engine identifies and returns the most similar movies.
+6. The Flask backend processes client requests and communicates with the database and recommendation engine.
+7. The backend returns movie data and recommendations to the frontend through REST APIs.
+8. Users can register, log in, manage favorites, and explore personalized movie recommendations through the MovieSphere web application.
+
+## Project Highlights
+
+* Full-stack web application with a RESTful Flask backend
+* Content-based recommendation system using Classical Machine Learning
+* Secure user authentication using JWT
+* Responsive design optimized for desktop and mobile devices
+* Modular and scalable project architecture
+* Clean, reusable, and maintainable code following best development practices
 
 ## Getting Started
 
-1. Clone this repository:
+1. Clone this repository.
+2. Create and activate a Python virtual environment.
+3. Install the required backend dependencies.
+4. Configure the database.
+5. Train the recommendation model and generate the required `.pkl` files.
+6. Start the Flask backend server.
+7. Launch the frontend application.
+8. Register a new account and start exploring personalized movie recommendations with MovieSphere.
