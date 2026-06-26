@@ -2,46 +2,37 @@
 
 ## Overview
 
-MovieSphere is a full-stack movie recommendation web application that helps users discover movies based on their interests using **content-based recommendation techniques**. The system analyzes movie metadata and recommends similar movies by applying **TF-IDF Vectorization** and **Cosine Similarity**. It provides a modern, responsive, and user-friendly platform for searching, exploring, discovering, and organizing movies.
+MovieSphere is a full-stack movie recommendation web application that helps users discover movies using **Content-Based Recommendation** techniques. It recommends similar movies by applying **TF-IDF Vectorization** and **Cosine Similarity** to movie metadata. The application provides a responsive interface for searching, exploring, and managing personalized movie collections.
 
 ---
+
 ## Pages
 
 * Home
-* Login
-* Register
-* Search Movies
+* Login & Register
 * Movie Details
-* Favorites
-* Playlists
-* Watch Later
-* Watch History
-* User Profile
+* User Dashboard (Profile, Favorites, Playlists, Watch Later, Watch History)
 * 404 Page
 
 ---
 
 ## Features
 
-### Authentication
+* Secure user authentication using JWT
+* User registration with preferred movie genres
+* Search movies by title
+* Browse trending, popular, top-rated, and latest movies
+* Content-based movie recommendations
+* Suggested Movies and Top Picks sections
+* Favorite movies management
+* Custom playlist creation and management
+* Watch Later and Watch History
+* User profile management
+* Responsive and user-friendly interface
 
-* Secure user registration and login using JWT Authentication
-* Password hashing and protected routes
-* User logout and session management
+---
 
-### User Registration
-
-Users can register with:
-
-* Full Name
-* Username
-* Email Address
-* Password
-* Profile Picture (Optional)
-* Date of Birth (Optional)
-* Preferred Movie Genres
-
-### Supported Genres
+## Supported Genres
 
 * Action
 * Adventure
@@ -57,132 +48,6 @@ Users can register with:
 * Romance
 * Sci-Fi
 * Thriller
-
-Selected genres are stored in the database and used to generate personalized movie recommendations.
-
----
-
-## Home Page
-
-* Hero Banner
-* Trending Movies
-* Popular Movies
-* Top Rated Movies
-* Latest Releases
-* Suggested Movies
-* Top Picks For You
-* Movies Based on User Interests
-* Continue Watching
-* Recently Viewed Movies
-* Browse Movies by Genre
-
----
-
-## Search
-
-* Search movies by title
-* Instant search suggestions
-* Filter by genre
-* Filter by language
-* Filter by release year
-* Filter by IMDb rating
-* Sort by popularity
-* Sort by latest release
-
----
-
-## Movie Details
-
-Display:
-
-* Movie Poster
-* Movie Title
-* Genre
-* Overview
-* Release Date
-* Runtime
-* IMDb Rating
-* Cast
-* Director
-* Similar Movie Recommendations
-* Add to Favorites
-* Add to Playlist
-* Add to Watch Later
-* Mark as Watched
-
----
-
-## Favorites
-
-* View favorite movies
-* Add movies to favorites
-* Remove movies from favorites
-* Search favorite movies
-
----
-
-## My Playlists
-
-Users can:
-
-* Create custom playlists
-* Rename playlists
-* Delete playlists
-* Add movies to playlists
-* Remove movies from playlists
-* View playlist details
-
-Example playlists:
-
-* Weekend Movies
-* Watch Later
-* Action Collection
-* Comedy Collection
-* Sci-Fi Favorites
-
----
-
-## Watch Later
-
-* Save movies to watch later
-* Remove movies from the watch later list
-* Move movies from Watch Later to Favorites or Playlists
-
----
-
-## Watch History
-
-* View recently watched movies
-* Track watched movies
-* Continue watching list
-* Clear watch history
-
----
-
-## User Profile
-
-Display:
-
-* Profile Picture
-* Full Name
-* Username
-* Email Address
-* Preferred Genres
-* Favorite Movies
-* Created Playlists
-* Watch Later List
-* Watch History
-* Account Creation Date
-* Total Favorite Movies
-* Total Playlists
-* Total Movies Watched
-
-Users can:
-
-* Edit Profile
-* Update Profile Picture
-* Update Preferred Genres
-* Change Password
 
 ---
 
@@ -219,42 +84,35 @@ Users can:
 
 ## How It Works
 
-1. The application loads movie data, including movie titles, genres, descriptions, keywords, cast, and other metadata.
-2. The dataset is cleaned and preprocessed using Pandas and NumPy.
-3. Movie descriptions and metadata are transformed into numerical feature vectors using TF-IDF Vectorization.
-4. Cosine Similarity is used to calculate similarity scores between movies.
-5. When a user searches for or selects a movie, the recommendation engine returns the most similar movies.
-6. During registration, users select their preferred movie genres, which are stored in the database.
-7. Personalized recommendations are generated using the user's preferred genres, favorite movies, and recently viewed movies.
-8. Users can create playlists, manage favorites, save movies to Watch Later, and maintain their watch history.
-9. The Flask backend processes client requests, communicates with the database, and executes the recommendation engine.
-10. RESTful APIs deliver movie information and recommendations to the frontend.
+1. Load and preprocess movie metadata from the TMDB dataset.
+2. Clean and transform the dataset using Pandas and NumPy.
+3. Generate feature vectors using TF-IDF Vectorization.
+4. Calculate movie similarity with Cosine Similarity.
+5. Store user information, preferences, favorites, playlists, and watch history in the database.
+6. Generate personalized movie recommendations based on selected movies and preferred genres.
+7. Serve movie data and recommendations through RESTful Flask APIs.
 
 ---
 
 ## Project Highlights
 
-* Full-stack web application with a RESTful Flask backend
-* Content-based recommendation system using Classical Machine Learning
-* Secure JWT-based authentication and authorization
-* Personalized recommendations based on user preferences
-* Suggested Movies and Top Picks For You sections
-* Favorites, Watch Later, and custom playlist management
-* User profile with watch history and personalized statistics
-* Responsive design optimized for desktop and mobile devices
-* Modular, scalable, and maintainable project architecture
-* Clean, reusable, and well-structured code following software development best practices
+* Full-stack web application with Flask REST APIs
+* Content-based recommendation engine using Classical Machine Learning
+* Secure JWT-based authentication
+* Personalized recommendations based on user interests
+* Favorites, Playlists, Watch Later, and Watch History
+* Responsive design for desktop and mobile devices
+* Modular and scalable project architecture
 
 ---
 
 ## Getting Started
 
-1. Clone this repository.
+1. Clone the repository.
 2. Create and activate a Python virtual environment.
-3. Install the required backend dependencies.
+3. Install the required dependencies.
 4. Configure the database.
-5. Train the recommendation model and generate the required `.pkl` files.
+5. Train the recommendation model and generate the `.pkl` files.
 6. Start the Flask backend server.
 7. Launch the frontend application.
-8. Register a new account and select your preferred movie genres.
-9. Log in to explore movies, receive personalized recommendations, manage favorites, create playlists, save movies to Watch Later, and enjoy the complete MovieSphere experience.
+8. Register an account, select your preferred genres, and start exploring personalized movie recommendations.
