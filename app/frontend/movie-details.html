@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white">
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <nav class="fixed top-0 w-full z-50 glass-nav px-6 md:px-12 py-4 flex justify-between items-center">
+        <a href="index.html" class="text-2xl font-black text-red-600 tracking-tighter">MOVIESPHERE</a>
+        <div id="auth-nav"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative h-[60vh] w-full overflow-hidden">
+        <img id="detail-backdrop" src="" class="w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent"></div>
+        
+        <div class="absolute bottom-0 left-0 w-full p-8 md:p-12 flex flex-col md:flex-row items-end gap-8">
+            <img id="detail-poster" src="" class="w-48 md:w-64 rounded-xl shadow-2xl border border-gray-800 hidden md:block">
+            <div class="max-w-3xl">
+                <h1 id="detail-title" class="text-4xl md:text-6xl font-black mb-4">Loading...</h1>
+                <div class="flex items-center gap-4 text-sm text-gray-400 mb-6">
+                    <span id="detail-year"></span>
+                    <span id="detail-rating" class="text-red-500 font-bold"></span>
+                    <span id="detail-genres" class="flex gap-2"></span>
+                </div>
+                <div class="flex gap-4">
+                    <button id="fav-btn" class="bg-white text-black px-8 py-3 rounded-lg font-bold hover:bg-gray-200 transition">
+                        <i class="far fa-heart mr-2"></i> Favorite
+                    </button>
+                    <button id="later-btn" class="bg-zinc-700/50 text-white px-8 py-3 rounded-lg font-bold hover:bg-zinc-700 transition">
+                        <i class="far fa-clock mr-2"></i> Watch Later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="px-8 md:px-12 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2">
+            <h3 class="text-gray-500 uppercase text-xs font-bold tracking-widest mb-4">Synopsis</h3>
+            <p id="detail-overview" class="text-lg text-gray-300 leading-relaxed mb-8">...</p>
+        </div>
+        
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-gray-500 uppercase text-xs font-bold mb-2">Director</h3>
+                <p id="detail-director" class="text-white">...</p>
+            </div>
+            <div>
+                <h3 class="text-gray-500 uppercase text-xs font-bold mb-2">Top Cast</h3>
+                <p id="detail-cast" class="text-white text-sm">...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Recommendation Section -->
+    <section class="px-8 md:px-12 pb-20">
+        <h3 class="text-2xl font-bold mb-8">More Like This</h3>
+        <div id="recommendation-grid" class="grid grid-cols-2 md:grid-cols-5 gap-6"></div>
+    </section>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('id');
+            if (!movieId) window.location.href = 'index.html';
+
+            // Fetch Details
+            const { data: movie, ok } = await MovieSphereAPI.request(`/movies/${movieId}`);
+            if (ok) {
+                document.getElementById('detail-backdrop').src = movie.backdrop_path;
+                document.getElementById('detail-poster').src = movie.poster_path;
+                document.getElementById('detail-title').innerText = movie.title;
+                document.getElementById('detail-year').innerText = movie.release_date.split('-')[0];
+                document.getElementById('detail-rating').innerText = `★ ${movie.rating.toFixed(1)}`;
+                document.getElementById('detail-overview').innerText = movie.overview;
+                document.getElementById('detail-director').innerText = movie.director;
+                document.getElementById('detail-cast').innerText = JSON.parse(movie.cast).join(', ');
+                
+                // Set Genres
+                document.getElementById('detail-genres').innerHTML = movie.genres.map(g => 
+                    `<span class="border border-gray-700 px-2 py-0.5 rounded text-[10px] uppercase">${g}</span>`
+                ).join('');
+
+                // Action Buttons
+                document.getElementById('fav-btn').onclick = () => toggleAction(movieId, '/user/favorites');
+                document.getElementById('later-btn').onclick = () => toggleAction(movieId, '/user/watchlater');
+                
+                // Automatically log to history
+                MovieSphereAPI.request('/user/history', 'POST', { movie_id: movieId });
+            }
+
+            // Fetch Recommendations
+            const recGrid = document.getElementById('recommendation-grid');
+            recGrid.innerHTML = Array(5).fill(MovieSphereUI.createSkeleton()).join('');
+            const { data: recs } = await MovieSphereAPI.request(`/movies/recommend/${movieId}`);
+            if (recs) {
+                recGrid.innerHTML = recs.map(m => MovieSphereUI.renderMovieCard(m)).join('');
+            }
+        });
+
+        async function toggleAction(id, endpoint) {
+            const { data, ok } = await MovieSphereAPI.request(endpoint, 'POST', { movie_id: id });
+            if (ok) MovieSphereUI.showToast(data.message);
+        }
+    </script>
+</body>
+</html>

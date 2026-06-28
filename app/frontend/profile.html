@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Settings | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white flex min-h-screen">
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass-nav h-screen sticky top-0 flex flex-col py-8 px-4">
+        <h1 class="text-2xl font-black text-red-600 tracking-tighter mb-12 px-4">MOVIESPHERE</h1>
+        <nav class="flex-1 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-4 p-4 rounded-xl text-gray-400 hover:bg-zinc-800 transition">
+                <i class="fas fa-chart-pie"></i><span>Overview</span>
+            </a>
+            <a href="favorites.html" class="flex items-center space-x-4 p-4 rounded-xl text-gray-400 hover:bg-zinc-800 transition">
+                <i class="fas fa-heart"></i><span>Favorites</span>
+            </a>
+            <a href="profile.html" class="flex items-center space-x-4 p-4 rounded-xl bg-red-600 text-white font-bold transition">
+                <i class="fas fa-user-cog"></i><span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-12 max-w-4xl">
+        <h2 class="text-3xl font-black mb-8">Profile Settings</h2>
+        
+        <form id="profileForm" class="space-y-8 glass-card p-10 rounded-2xl">
+            <!-- Profile Image Section -->
+            <div class="flex items-center space-x-8 mb-10 pb-10 border-b border-gray-800">
+                <img id="profilePreview" src="" class="w-24 h-24 rounded-2xl object-cover border-2 border-red-600 shadow-xl shadow-red-600/20">
+                <div class="flex-1">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Profile Image URL</label>
+                    <input type="text" id="profileImageInput" placeholder="https://image-link.com/photo.jpg" 
+                        class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 px-4 outline-none focus:border-red-600 transition text-sm">
+                </div>
+            </div>
+
+            <!-- Account Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Full Name</label>
+                    <input type="text" id="profileName" required class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 px-4 outline-none focus:border-red-600 transition text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
+                    <input type="email" id="profileEmail" disabled class="w-full bg-zinc-900 border border-gray-800 rounded-xl py-3 px-4 text-gray-500 cursor-not-allowed text-sm">
+                </div>
+            </div>
+
+            <!-- Genre Selection -->
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Update Preferred Genres</label>
+                <div id="genreGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <!-- Genres injected by JS -->
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" id="saveProfileBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-10 rounded-xl transition-all transform active:scale-95 flex items-center justify-center">
+                    <span>Save Changes</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        const GENRES = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "Horror", "Mystery", "Romance", "Sci-Fi", "Thriller"];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            initGenreGrid();
+            await loadProfile();
+        });
+
+        function initGenreGrid() {
+            const grid = document.getElementById('genreGrid');
+            grid.innerHTML = GENRES.map(genre => `
+                <label class="flex items-center p-3 rounded-xl border border-gray-800 cursor-pointer hover:bg-zinc-800 transition group">
+                    <input type="checkbox" name="genres" value="${genre}" class="hidden peer">
+                    <div class="w-4 h-4 rounded border border-gray-600 peer-checked:bg-red-600 peer-checked:border-red-600 flex items-center justify-center mr-2">
+                        <i class="fas fa-check text-[10px] text-white opacity-0 peer-checked:opacity-100"></i>
+                    </div>
+                    <span class="text-xs text-gray-400 peer-checked:text-white">${genre}</span>
+                </label>
+            `).join('');
+        }
+
+        async function loadProfile() {
+            const { data: user, ok } = await MovieSphereAPI.request('/auth/profile');
+            if (ok) {
+                document.getElementById('profileName').value = user.name;
+                document.getElementById('profileEmail').value = user.email;
+                document.getElementById('profileImageInput').value = user.profile_image || '';
+                document.getElementById('profilePreview').src = user.profile_image || `https://ui-avatars.com/api/?name=${user.name}&background=E50914&color=fff`;
+
+                // Check preferred genres
+                if (user.genres) {
+                    user.genres.forEach(g => {
+                        const cb = document.querySelector(`input[value="${g}"]`);
+                        if (cb) cb.checked = true;
+                    });
+                }
+            }
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveProfileBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin mr-2"></i> Saving...';
+
+            const payload = {
+                name: document.getElementById('profileName').value,
+                profile_image: document.getElementById('profileImageInput').value,
+                genres: Array.from(document.querySelectorAll('input[name="genres"]:checked')).map(el => el.value)
+            };
+
+            const { ok } = await MovieSphereAPI.request('/auth/profile', 'PUT', payload);
+            if (ok) {
+                MovieSphereUI.showToast("Profile updated successfully!");
+                // Update local storage so navbar reflects changes
+                const localUser = JSON.parse(localStorage.getItem('user_data'));
+                localUser.name = payload.name;
+                localUser.profile_image = payload.profile_image;
+                localStorage.setItem('user_data', JSON.stringify(localUser));
+                setTimeout(() => window.location.reload(), 1000);
+            }
+            btn.disabled = false;
+            btn.innerHTML = 'Save Changes';
+        });
+    </script>
+</body>
+</html>

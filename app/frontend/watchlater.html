@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Watch Later | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white flex min-h-screen">
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <aside class="w-64 glass-nav h-screen sticky top-0 flex flex-col py-8 px-4">
+        <h1 class="text-2xl font-black text-red-600 tracking-tighter mb-12 px-4">MOVIESPHERE</h1>
+        <nav class="flex-1 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-4 p-4 rounded-xl text-gray-400 hover:bg-zinc-800 transition">
+                <i class="fas fa-chart-pie"></i><span>Overview</span>
+            </a>
+            <a href="watchlater.html" class="flex items-center space-x-4 p-4 rounded-xl bg-red-600 text-white font-bold transition">
+                <i class="fas fa-clock"></i><span>Watch Later</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-12">
+        <h2 class="text-3xl font-black mb-12">To Watch List</h2>
+        <div id="watchlater-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <!-- Dynamic Cards -->
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadWatchLater);
+
+        async function loadWatchLater() {
+            const grid = document.getElementById('watchlater-grid');
+            grid.innerHTML = Array(5).fill(MovieSphereUI.createSkeleton()).join('');
+            
+            const { data, ok } = await MovieSphereAPI.request('/user/watchlater/list');
+            if (ok) {
+                if (data.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500">Your list is empty.</div>`;
+                    return;
+                }
+                grid.innerHTML = data.map(movie => `
+                    <div class="relative group">
+                        ${MovieSphereUI.renderMovieCard(movie)}
+                        <div class="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+                            <button onclick="markAsWatched(${movie.id})" class="bg-green-600 p-2 rounded-lg text-white shadow-lg hover:bg-green-700 transition">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="removeFromLater(${movie.id})" class="bg-black/80 p-2 rounded-lg text-red-500 shadow-lg hover:bg-red-600 hover:text-white transition">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function markAsWatched(id) {
+            // Add to history and remove from watch later
+            await MovieSphereAPI.request('/user/history', 'POST', { movie_id: id });
+            await MovieSphereAPI.request('/user/watchlater', 'POST', { movie_id: id });
+            MovieSphereUI.showToast("Enjoyed the movie? Marked as watched!");
+            loadWatchLater();
+        }
+
+        async function removeFromLater(id) {
+            const { ok } = await MovieSphereAPI.request('/user/watchlater', 'POST', { movie_id: id });
+            if (ok) {
+                MovieSphereUI.showToast("Removed from Watch Later");
+                loadWatchLater();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Favorites | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white flex min-h-screen">
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <!-- Reusable Sidebar Placeholder -->
+    <aside class="w-64 glass-nav h-screen sticky top-0 flex flex-col py-8 px-4">
+        <h1 class="text-2xl font-black text-red-600 tracking-tighter mb-12 px-4">MOVIESPHERE</h1>
+        <nav class="flex-1 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-4 p-4 rounded-xl text-gray-400 hover:bg-zinc-800 transition">
+                <i class="fas fa-chart-pie"></i><span>Overview</span>
+            </a>
+            <a href="favorites.html" class="flex items-center space-x-4 p-4 rounded-xl bg-red-600 text-white font-bold transition">
+                <i class="fas fa-heart"></i><span>Favorites</span>
+            </a>
+            <a href="playlist.html" class="flex items-center space-x-4 p-4 rounded-xl text-gray-400 hover:bg-zinc-800 transition">
+                <i class="fas fa-list-ul"></i><span>Playlists</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-12">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-3xl font-black">My Favorites</h2>
+            <div class="relative">
+                <input type="text" id="favSearch" placeholder="Search favorites..." class="bg-zinc-900 border border-gray-800 rounded-full py-2 px-6 text-sm outline-none focus:border-red-600">
+            </div>
+        </div>
+
+        <div id="favorites-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <!-- Dynamic Cards -->
+        </div>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', loadFavorites);
+
+        async function loadFavorites() {
+            const grid = document.getElementById('favorites-grid');
+            grid.innerHTML = Array(4).fill(MovieSphereUI.createSkeleton()).join('');
+            
+            const { data, ok } = await MovieSphereAPI.request('/user/favorites/list');
+            if (ok) {
+                if (data.length === 0) {
+                    grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-20">No favorites added yet.</p>`;
+                    return;
+                }
+                grid.innerHTML = data.map(movie => `
+                    <div class="relative group">
+                        ${MovieSphereUI.renderMovieCard(movie)}
+                        <button onclick="removeFavorite(${movie.id})" class="absolute top-2 right-2 bg-black/80 p-2 rounded-full text-red-500 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function removeFavorite(id) {
+            const { ok } = await MovieSphereAPI.request('/user/favorites', 'POST', { movie_id: id });
+            if (ok) {
+                MovieSphereUI.showToast("Removed from favorites");
+                loadFavorites();
+            }
+        }
+    </script>
+</body>
+</html>

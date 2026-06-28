@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] min-h-screen flex items-center justify-center relative overflow-hidden">
+    
+    <!-- Background Blur Decorative Circles -->
+    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-900/20 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-red-900/20 rounded-full blur-[120px]"></div>
+
+    <div id="toast-container" class="fixed top-5 right-5 z-[1000]"></div>
+
+    <div class="glass-card w-full max-w-md p-10 rounded-2xl relative z-10 mx-4">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-black text-red-600 tracking-tighter mb-2">MOVIESPHERE</h1>
+            <p class="text-gray-400 text-sm">Welcome back! Please enter your details.</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="email" id="email" required 
+                        class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 pl-12 pr-4 focus:border-red-600 focus:ring-1 focus:ring-red-600 outline-none transition-all text-sm"
+                        placeholder="name@company.com">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Password</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="password" id="password" required 
+                        class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 pl-12 pr-4 focus:border-red-600 focus:ring-1 focus:ring-red-600 outline-none transition-all text-sm"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center text-gray-400">
+                    <input type="checkbox" class="mr-2 accent-red-600"> Remember me
+                </label>
+                <a href="#" class="text-red-500 hover:underline">Forgot password?</a>
+            </div>
+
+            <button type="submit" id="loginBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all transform active:scale-95 flex justify-center items-center">
+                <span>Sign In</span>
+            </button>
+        </form>
+
+        <p class="text-center text-gray-400 text-sm mt-8">
+            New to MovieSphere? <a href="register.html" class="text-white font-bold hover:text-red-500 transition">Create an account</a>
+        </p>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth.js"></script>
+</body>
+</html>

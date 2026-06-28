@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white flex min-h-screen">
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <!-- Sidebar -->
+    <aside class="w-20 lg:w-64 glass-nav h-screen sticky top-0 flex flex-col py-8 px-4 z-50">
+        <div class="mb-12 text-center lg:text-left lg:px-4">
+            <h1 class="text-2xl font-black text-red-600 tracking-tighter hidden lg:block">MOVIESPHERE</h1>
+            <div class="lg:hidden text-2xl font-black text-red-600">M</div>
+        </div>
+
+        <nav class="flex-1 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-4 p-4 rounded-xl bg-red-600 text-white font-bold transition">
+                <i class="fas fa-chart-pie"></i>
+                <span class="hidden lg:block">Overview</span>
+            </a>
+            <a href="favorites.html" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-zinc-800 text-gray-400 hover:text-white transition">
+                <i class="fas fa-heart"></i>
+                <span class="hidden lg:block">Favorites</span>
+            </a>
+            <a href="playlist.html" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-zinc-800 text-gray-400 hover:text-white transition">
+                <i class="fas fa-list-ul"></i>
+                <span class="hidden lg:block">Playlists</span>
+            </a>
+            <a href="watchlater.html" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-zinc-800 text-gray-400 hover:text-white transition">
+                <i class="fas fa-clock"></i>
+                <span class="hidden lg:block">Watch Later</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto pt-8 border-t border-gray-800">
+            <a href="profile.html" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-zinc-800 text-gray-400 hover:text-white transition">
+                <i class="fas fa-user-cog"></i>
+                <span class="hidden lg:block">Settings</span>
+            </a>
+            <button onclick="logout()" class="w-full flex items-center space-x-4 p-4 rounded-xl hover:bg-zinc-800 text-red-500 transition">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="hidden lg:block">Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 lg:p-12">
+        <header class="flex justify-between items-center mb-12">
+            <div>
+                <h2 id="welcome-text" class="text-3xl font-black">Welcome back!</h2>
+                <p class="text-gray-500">Here's your cinematic activity at a glance.</p>
+            </div>
+            <img id="user-avatar" src="assets/images/default-avatar.png" class="w-12 h-12 rounded-full border-2 border-red-600 p-0.5">
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Total Watched</p>
+                <h3 id="stat-total-watched" class="text-3xl font-black">0</h3>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Favorite Genre</p>
+                <h3 id="stat-top-genre" class="text-3xl font-black text-red-500">N/A</h3>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">Saved Movies</p>
+                <h3 id="stat-favorites" class="text-3xl font-black">0</h3>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-2">ML Accuracy</p>
+                <h3 id="stat-accuracy" class="text-3xl font-black text-green-500">92%</h3>
+            </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <section class="glass-card rounded-2xl overflow-hidden">
+            <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+                <h3 class="font-bold">Recent Watch History</h3>
+                <a href="#" class="text-xs text-red-500 hover:underline">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="text-xs text-gray-500 uppercase bg-black/20">
+                        <tr>
+                            <th class="p-6">Movie</th>
+                            <th class="p-6">Date</th>
+                            <th class="p-6">Score</th>
+                            <th class="p-6">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table" class="text-sm">
+                        <!-- History Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

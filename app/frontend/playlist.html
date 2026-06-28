@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Playlists | MovieSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f0f] text-white flex min-h-screen">
+    <div id="toast-container" class="fixed top-24 right-5 z-[1000]"></div>
+
+    <!-- Sidebar (Same as Dashboard) -->
+    <!-- ... [Include sidebar code from dashboard.html here] ... -->
+
+    <main class="flex-1 p-6 lg:p-12">
+        <header class="flex justify-between items-center mb-12">
+            <h2 class="text-3xl font-black">My Playlists</h2>
+            <button onclick="openCreateModal()" class="bg-red-600 px-6 py-2 rounded-lg font-bold hover:bg-red-700 transition">
+                <i class="fas fa-plus mr-2"></i> Create Playlist
+            </button>
+        </header>
+
+        <div id="playlists-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Playlist Cards -->
+        </div>
+    </main>
+
+    <!-- Create Playlist Modal -->
+    <div id="create-modal" class="fixed inset-0 z-[2000] bg-black/80 flex items-center justify-center hidden">
+        <div class="glass-card w-full max-w-md p-8 rounded-2xl">
+            <h2 class="text-xl font-bold mb-6">New Playlist</h2>
+            <input type="text" id="playlist-name" placeholder="Playlist Name" class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 px-4 mb-4 outline-none focus:border-red-600">
+            <textarea id="playlist-desc" placeholder="Description (Optional)" class="w-full bg-black/40 border border-gray-800 rounded-xl py-3 px-4 mb-6 outline-none focus:border-red-600"></textarea>
+            <div class="flex space-x-4">
+                <button onclick="closeCreateModal()" class="flex-1 py-3 bg-zinc-800 rounded-xl">Cancel</button>
+                <button onclick="handleCreatePlaylist()" class="flex-1 py-3 bg-red-600 rounded-xl font-bold">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
